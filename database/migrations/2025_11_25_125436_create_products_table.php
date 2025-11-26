@@ -13,9 +13,19 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->text('description');
+            $table->text('content');
+            $table->decimal('price');
+            $table->decimal('old_price')->nullable();
+            $table->unsignedBigInteger('qty');
+            $table->foreignId('category_id')->index()->constrained('categories');
+            $table->foreignId('product_parent_id')->index()->constrained('product_parents');
             $table->timestamps();
         });
     }
+
+
 
     /**
      * Reverse the migrations.
