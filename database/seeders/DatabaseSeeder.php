@@ -2,9 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Role\RoleEnum;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,11 +18,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $userBased=[
+          'name'=>'user',
+          'email'=>'user@gmail.com',
+          'password'=>Hash::make(123123123)
+        ];
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        $user=User::firstOrCreate([
+           'email'=>$userBased['email'],
+        ],$userBased);
+
+        $role=Role::firstOrCreate(['title'=>RoleEnum::ADMIN->value]);
+
+        $user->roles()->sync($role->id);
     }
 }
